@@ -10,7 +10,7 @@ class ScenarioCreate(BaseModel):
     traffic_density: float
     road_type: str
     object_count: int
-    dataset_size_mb: float
+    dataset_size_mb: float = 100.0
 
 class ScenarioResponse(BaseModel):
     id: UUID

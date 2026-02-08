@@ -53,8 +53,8 @@ function Layout({ children }) {
                   key={item.path}
                   to={item.path}
                   className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive
-                      ? 'bg-primary text-white'
-                      : 'text-gray-300 hover:bg-card-hover'
+                    ? 'bg-primary text-white'
+                    : 'text-gray-300 hover:bg-card-hover'
                     }`}
                 >
                   <Icon className="w-5 h-5" />
@@ -93,19 +93,19 @@ function Layout({ children }) {
 }
 
 function App() {
+  const location = useLocation();
+
   return (
-    <BrowserRouter>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<ScenarioBuilder />} />
-          <Route path="/simulation" element={<SceneSimulation />} />
-          <Route path="/jobs" element={<JobDashboard />} />
-          <Route path="/metrics" element={<MetricsAnalytics />} />
-          <Route path="/risk" element={<SafetyRisk />} />
-          <Route path="/insights" element={<InsightPanel />} />
-        </Routes>
-      </Layout>
-    </BrowserRouter>
+    <Layout>
+      <Routes location={location}>
+        <Route path="/" element={<ScenarioBuilder key="scenario" />} />
+        <Route path="/simulation" element={<SceneSimulation key={location.pathname} />} />
+        <Route path="/jobs" element={<JobDashboard key={location.pathname} />} />
+        <Route path="/metrics" element={<MetricsAnalytics key={location.pathname} />} />
+        <Route path="/risk" element={<SafetyRisk key={location.pathname} />} />
+        <Route path="/insights" element={<InsightPanel key={location.pathname} />} />
+      </Routes>
+    </Layout>
   );
 }
 

@@ -74,11 +74,20 @@ def simulate_job(job: Job, db: Session):
         # Sleep to simulate real training time
         time.sleep(time_per_epoch)
     
-    # Generate final risk analysis
-    collision_prob = min(0.95, (weather_risk + traffic_risk) * 0.5 * (1 - accuracy * 0.5))
-    pedestrian_risk = min(0.95, (time_risk + weather_risk) * 0.4 * (1 - detection_score * 0.6))
-    visibility_risk = min(0.95, weather_risk * (1 - accuracy * 0.4))
-    safety_score = max(0, min(100, (1 - (collision_prob + pedestrian_risk + visibility_risk) / 3) * 100))
+    # Generate final risk analysis with realistic danger assessment
+    # Base environmental risks (higher for dangerous conditions)
+    base_collision = (weather_risk * 0.5 + traffic_risk * 0.7) * 0.8
+    base_pedestrian = (time_risk * 0.6 + weather_risk * 0.5 + traffic_risk * 0.3) * 0.7
+    base_visibility = weather_risk * 0.9
+    
+    # Model performance reduces risk, but not completely (dangerous is still dangerous)
+    collision_prob = min(0.95, base_collision * (1 - accuracy * 0.3))  # Less optimistic reduction
+    pedestrian_risk = min(0.95, base_pedestrian * (1 - detection_score * 0.35))
+    visibility_risk = min(0.95, base_visibility * (1 - accuracy * 0.25))
+    
+    # Safety score: 0-100 where lower is more dangerous
+    avg_risk = (collision_prob + pedestrian_risk + visibility_risk) / 3
+    safety_score = max(0, min(100, (1 - avg_risk) * 100))
     
     risk_analysis = RiskAnalysis(
         job_id=job.id,
