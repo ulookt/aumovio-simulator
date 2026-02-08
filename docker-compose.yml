@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: aumovio_db
+    environment:
+      POSTGRES_USER: aumovio
+      POSTGRES_PASSWORD: aumovio_pass
+      POSTGRES_DB: aumovio_platform
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - aumovio_network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U aumovio" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: aumovio_backend
+    environment:
+      DATABASE_URL: postgresql://aumovio:aumovio_pass@postgres:5432/aumovio_platform
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      CORS_ORIGINS: http://localhost:3000
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - aumovio_network
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: aumovio_worker
+    command: python -m app.worker
+    environment:
+      DATABASE_URL: postgresql://aumovio:aumovio_pass@postgres:5432/aumovio_platform
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - aumovio_network
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: aumovio_frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - aumovio_network
+    restart: unless-stopped
+
+networks:
+  aumovio_network:
+    driver: bridge
+
+volumes:
+  postgres_data:

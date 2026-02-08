@@ -1,0 +1,715 @@
+PROJECT MASTER PROMPT — FULL-STACK AI COMPUTE & SIMULATION PLATFORM (POSTGRES STACK)
+
+You are helping me design and implement a full-stack web application for a technical internship interview.
+
+The project must match the following mandatory stack and architectural expectations:
+
+---
+
+## MANDATORY TECHNOLOGY STACK
+
+Backend:
+
+* Python
+* FastAPI (preferred) or Flask
+
+Frontend:
+
+* React (Single Page Application)
+* Vite
+* Tailwind CSS
+* shadcn/ui component library
+* Recharts for analytics visualizations
+
+Database:
+
+* PostgreSQL (MANDATORY — not SQLite)
+
+Infrastructure:
+
+* Docker
+* Docker Compose
+
+AI Integration:
+
+* OpenAI / ChatGPT API
+
+Nice-to-have concepts to reflect architecturally:
+
+* CI/CD pipelines
+* Kubernetes deployment readiness
+* Compute orchestration
+* Authentication & authorization
+* ML lifecycle awareness
+
+---
+
+## PROJECT OVERVIEW
+
+We are building:
+
+“A synthetic autonomous driving experimentation platform that enables AI engineers to generate driving scenarios, execute simulation experiments on shared compute infrastructure, analyze training performance, evaluate safety risks, and receive AI-generated engineering insights.”
+
+This is NOT a real autonomous driving system.
+
+It is the internal platform used by AI product teams to run and evaluate experiments.
+
+The system simulates:
+
+* High-performance compute provisioning
+* Large-scale dataset storage
+* AI training workflows
+* Safety validation analytics
+
+---
+
+## CORE PLATFORM MODULES
+
+1. SCENARIO GENERATOR
+
+---
+
+Users create synthetic driving environments.
+
+Input parameters:
+
+* Weather (rain, fog, sunny)
+* Time of day (day, night)
+* Traffic density (slider)
+* Road type (city, highway)
+* Pedestrian frequency
+
+Output:
+
+Structured scenario dataset stored in PostgreSQL.
+
+Schema example:
+
+scenarios table:
+
+* id (UUID)
+* weather
+* time_of_day
+* traffic_density
+* road_type
+* object_count
+* created_at
+
+Purpose:
+
+Simulates autonomous driving test environments.
+
+---
+
+2. 2D SCENE SIMULATION
+
+---
+
+A top-down visualization of the generated scenario.
+
+This is NOT 3D simulation.
+
+It is a lightweight perception playback environment.
+
+Scene includes:
+
+* Ego vehicle
+* Traffic vehicles
+* Pedestrians
+* Obstacles
+* Lanes & intersections
+
+Movement:
+
+* Waypoint-based animation
+* Scripted obstacle avoidance
+* Speed adjustments
+
+Rendered in React using Canvas or SVG.
+
+---
+
+3. COMPUTE JOB ORCHESTRATION
+
+---
+
+Users launch AI simulation experiments.
+
+Job configuration includes:
+
+* Scenario ID
+* Model type (mock)
+* Epoch count
+* Compute tier
+
+Compute tiers simulate HPC infrastructure:
+
+Example tiers:
+
+Small:
+
+* GPU: T4
+* VRAM: 8GB
+* Low cost
+
+Medium:
+
+* GPU: A100
+* VRAM: 40GB
+
+Large:
+
+* GPU: H100
+* VRAM: 80GB
+
+jobs table (PostgreSQL):
+
+* id
+* scenario_id (FK)
+* compute_tier
+* epochs
+* status
+* progress
+* runtime_sec
+* cost_estimate
+* created_at
+
+Multiple jobs can run concurrently.
+
+---
+
+4. METRICS & ANALYTICS SYSTEM
+
+---
+
+Training metrics are synthetically generated.
+
+metrics table:
+
+* id
+* job_id (FK)
+* epoch
+* loss
+* accuracy
+* detection_score
+
+Compute telemetry table:
+
+compute_metrics:
+
+* id
+* job_id (FK)
+* gpu_utilization
+* vram_usage
+* cpu_usage
+* runtime_sec
+
+Visualizations (React + Recharts):
+
+* Loss vs Epoch line chart
+* Accuracy curve
+* GPU utilization graph
+* Cost vs performance bars
+
+---
+
+5. SAFETY RISK ANALYSIS
+
+---
+
+Derived from scenario + performance metrics.
+
+risk_analysis table:
+
+* id
+* job_id (FK)
+* collision_probability
+* pedestrian_risk
+* visibility_risk
+* safety_score
+
+Displayed as:
+
+* Risk gauges
+* Heatmaps
+* Hazard indicators
+
+Purpose:
+
+Connect AI performance → road safety.
+
+---
+
+6. STORAGE PLATFORM SIMULATION
+
+---
+
+To simulate large-scale storage infrastructure, the system tracks:
+
+* Scenario dataset size
+* Artifact storage
+* Logs
+* Reports
+
+artifacts table:
+
+* id
+* job_id
+* artifact_type
+* file_size_mb
+* created_at
+
+Dashboards show:
+
+* Storage utilization
+* Dataset growth
+* Artifact distribution
+
+---
+
+7. CHATGPT API INTEGRATION
+
+---
+
+Generative AI enhances the platform.
+
+Use cases:
+
+A) Scenario Intelligence
+Explains risk factors in generated environment.
+
+B) Experiment Insights
+Analyzes training metrics.
+
+C) Safety Explanation
+Interprets collision risk.
+
+D) Compute Optimization
+Suggests better resource allocation.
+
+Backend sends structured experiment data → ChatGPT → stores insights.
+
+insights table:
+
+* id
+* job_id
+* insight_text
+* created_at
+
+---
+
+8. JOB RUNTIME MODEL
+
+---
+
+Simulation runtime must feel realistic but demo-friendly.
+
+Runtime targets:
+
+* 10–30 seconds per job
+
+Runtime depends on:
+
+* Scenario complexity
+* Traffic density
+* Compute tier
+
+Worker loop generates metrics gradually.
+
+---
+
+9. SYSTEM ARCHITECTURE
+
+---
+
+React SPA (Frontend)
+↓
+FastAPI Backend
+↓
+PostgreSQL Database
+↓
+Job Simulation Worker
+↓
+OpenAI API (Insight Engine)
+
+All services containerized via Docker Compose.
+
+---
+
+10. DOCKER ARCHITECTURE
+
+---
+
+Services:
+
+* frontend (React)
+* backend (FastAPI)
+* postgres (DB)
+* worker (job simulator)
+
+Each has its own Dockerfile.
+
+---
+
+11. UX / VISUAL DESIGN GOALS
+
+---
+
+Platform should resemble enterprise AI dashboards:
+
+* Dark theme
+* Metric cards
+* Animated charts
+* Risk heatmaps
+* Status badges
+* Job tables
+
+---
+
+12. VALUE PROPOSITION
+
+---
+
+The platform demonstrates:
+
+* Autonomous AI experiment workflows
+* Compute provisioning simulation
+* Storage infrastructure usage
+* Safety validation analytics
+* AI-assisted engineering insights
+
+---
+
+13. CONSTRAINTS
+
+---
+
+* Must be buildable in ~1 day with AI assistance
+* No real ML training required
+* No real GPU compute required
+* No 3D simulation required
+* Focus on platform infrastructure simulation
+
+---
+
+## END OF MASTER PROMPT
+
+Your task is to help design, generate, and implement this full-stack system end-to-end, including backend services, PostgreSQL schemas, APIs, frontend dashboards, simulation logic, Docker setup, and AI integration.
+
+
+
+
+
+BACKEND + DATABASE IMPLEMENTATION PROMPT
+
+You are building the backend of a full-stack AI experimentation platform.
+
+Tech stack requirements:
+
+* Python
+* FastAPI
+* PostgreSQL (mandatory)
+* SQLAlchemy ORM
+* Docker-ready
+* Async-ready APIs
+
+The backend must simulate an AI compute & experimentation platform used by autonomous driving engineers.
+
+---
+
+## CORE RESPONSIBILITIES
+
+1. Scenario generation
+2. Simulation job orchestration
+3. Metrics tracking
+4. Compute telemetry
+5. Safety risk analytics
+6. ChatGPT insight storage
+
+---
+
+## DATABASE SCHEMA (PostgreSQL)
+
+Design SQLAlchemy models + migrations for:
+
+scenarios:
+
+* id (UUID PK)
+* weather
+* time_of_day
+* traffic_density
+* road_type
+* object_count
+* dataset_size_mb
+* created_at
+
+jobs:
+
+* id (UUID PK)
+* scenario_id (FK)
+* compute_tier
+* epochs
+* status
+* progress
+* runtime_sec
+* cost_estimate
+* created_at
+
+metrics:
+
+* id
+* job_id (FK)
+* epoch
+* loss
+* accuracy
+* detection_score
+
+compute_metrics:
+
+* id
+* job_id (FK)
+* gpu_utilization
+* vram_usage
+* cpu_usage
+* timestamp
+
+risk_analysis:
+
+* id
+* job_id (FK)
+* collision_probability
+* pedestrian_risk
+* visibility_risk
+* safety_score
+
+insights:
+
+* id
+* job_id (FK)
+* insight_text
+* created_at
+
+---
+
+## API ENDPOINTS
+
+POST /scenarios → Generate scenario
+GET /scenarios → List scenarios
+
+POST /jobs → Launch simulation
+GET /jobs → List jobs
+GET /jobs/{id} → Job status
+
+GET /metrics/{job_id} → Training metrics
+GET /compute/{job_id} → Compute telemetry
+GET /risk/{job_id} → Safety analytics
+GET /insights/{job_id} → AI analysis
+
+---
+
+## SIMULATION LOGIC
+
+Implement a worker that:
+
+* Runs 10–30 seconds
+* Simulates epochs
+* Generates loss & accuracy curves
+* Simulates GPU usage
+* Stores metrics progressively
+
+---
+
+## OUTPUT
+
+Generate:
+
+* Project folder structure
+* SQLAlchemy models
+* Database connection config
+* API routers
+* Worker simulator
+* Requirements.txt
+* Dockerfile
+
+
+
+
+
+FRONTEND DASHBOARD IMPLEMENTATION PROMPT
+
+You are building the frontend SPA for an AI compute & simulation platform.
+
+Tech stack:
+
+* React
+* Vite
+* Tailwind CSS
+* shadcn/ui
+* Recharts
+
+The UI must resemble an enterprise AI infrastructure dashboard.
+
+---
+
+## PAGES TO BUILD
+
+1. Scenario Builder
+
+* Weather selector
+* Traffic slider
+* Road type dropdown
+* Generate button
+
+2. Scene Simulation View
+
+* 2D top-down visualization
+* Moving ego vehicle
+* Traffic vehicles
+* Pedestrians
+* Obstacles
+* Heatmap overlay
+
+3. Job Dashboard
+
+* Table of running jobs
+* Status badges
+* Progress bars
+* Compute tier labels
+
+4. Metrics Analytics Page
+   Charts:
+
+* Loss vs Epoch
+* Accuracy vs Epoch
+* GPU utilization
+* Cost vs performance
+
+5. Safety Risk Panel
+
+* Risk gauges
+* Hazard bars
+* Collision probability
+
+6. AI Insight Panel
+
+* ChatGPT-generated experiment analysis
+
+---
+
+## VISUAL DESIGN
+
+* Dark dashboard theme
+* Card layouts
+* Sidebar navigation
+* Animated charts
+* Metric summary tiles
+
+---
+
+## OUTPUT
+
+Generate:
+
+* React project structure
+* Page routing
+* Dashboard layout
+* Chart components
+* API integration hooks
+* Tailwind config
+
+
+
+
+
+DOCKER & INFRASTRUCTURE SETUP PROMPT
+
+Containerize the full-stack AI platform.
+
+Services required:
+
+1. backend → FastAPI
+2. frontend → React SPA
+3. database → PostgreSQL
+4. worker → job simulator
+
+---
+
+## REQUIREMENTS
+
+Provide:
+
+* Dockerfile (backend)
+* Dockerfile (frontend)
+* docker-compose.yml
+* PostgreSQL service config
+* Volume persistence
+* Network config
+
+Ensure:
+
+* Backend connects to Postgres
+* Worker shares DB
+* Frontend connects to backend API
+
+---
+
+## BONUS (OPTIONAL)
+
+* Environment variables (.env)
+* OpenAI API key config
+* Health checks
+* Dev vs prod configs
+
+
+
+CHATGPT API INTEGRATION PROMPT
+
+Integrate OpenAI API into the backend to provide AI-generated engineering insights.
+
+---
+
+## USE CASES
+
+1. Scenario Risk Analysis
+   Explain risk factors in generated environment.
+
+2. Experiment Performance Analysis
+   Interpret training metrics.
+
+3. Safety Insight Generation
+   Explain collision probabilities.
+
+4. Compute Optimization Suggestions
+   Recommend better GPU tiers.
+
+---
+
+## IMPLEMENTATION
+
+Create:
+
+* OpenAI service module
+* Prompt templates
+* Insight generation endpoint
+* DB storage for insights
+
+Example prompt input:
+
+{
+"accuracy": 0.82,
+"collision_probability": 0.64,
+"weather": "fog",
+"traffic_density": 0.78
+}
+
+Output:
+
+Natural-language engineering analysis.
+
+---
+
+## SECURITY
+
+* Store API key in .env
+* Backend-only calls
+* No frontend exposure
