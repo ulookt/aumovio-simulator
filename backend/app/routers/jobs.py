@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from ..database import get_db
 from ..models import Job, Scenario
 from ..schemas import JobCreate, JobResponse
@@ -43,13 +43,27 @@ def create_job(job_data: JobCreate, db: Session = Depends(get_db)):
 @router.get("/", response_model=List[JobResponse])
 def list_jobs(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     """List all jobs"""
-    jobs = db.query(Job).order_by(Job.created_at.desc()).offset(skip).limit(limit).all()
+    jobs = db.query(Job).options(joinedload(Job.scenario)).order_by(Job.created_at.desc()).offset(skip).limit(limit).all()
+    
+    # Calculate indices
+    total_jobs = db.query(Job).count()
+    
+    # Get scenario indices map
+    # Order by creation ASC so index 1 is oldest
+    scenario_ids = db.query(Scenario.id).order_by(Scenario.created_at.asc()).all()
+    scenario_map = {sid[0]: i + 1 for i, sid in enumerate(scenario_ids)}
+    
+    for i, job in enumerate(jobs):
+        job.index = total_jobs - skip - i
+        if job.scenario_id in scenario_map:
+            job.scenario.index = scenario_map[job.scenario_id]
+            
     return jobs
 
 @router.get("/{job_id}", response_model=JobResponse)
 def get_job(job_id: UUID, db: Session = Depends(get_db)):
     """Get a specific job by ID"""
-    job = db.query(Job).filter(Job.id == job_id).first()
+    job = db.query(Job).options(joinedload(Job.scenario)).filter(Job.id == job_id).first()
     if not job:
         raise HTTPException(status_code=404, detail="Job not found")
     return job

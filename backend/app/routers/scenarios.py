@@ -20,7 +20,13 @@ def create_scenario(scenario: ScenarioCreate, db: Session = Depends(get_db)):
 @router.get("/", response_model=List[ScenarioResponse])
 def list_scenarios(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     """List all generated scenarios"""
-    scenarios = db.query(Scenario).offset(skip).limit(limit).all()
+    total_count = db.query(Scenario).count()
+    scenarios = db.query(Scenario).order_by(Scenario.created_at.desc()).offset(skip).limit(limit).all()
+    
+    # Assign index
+    for i, s in enumerate(scenarios):
+        s.index = total_count - skip - i
+        
     return scenarios
 
 @router.get("/{scenario_id}", response_model=ScenarioResponse)

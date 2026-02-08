@@ -134,7 +134,10 @@ export default function JobDashboard() {
                             {jobs.map((job) => (
                                 <tr key={job.id} className="hover:bg-card-hover transition-colors">
                                     <td className="px-6 py-4 text-sm font-mono text-gray-400">
-                                        {job.id.substring(0, 8)}...
+                                        <span className="font-bold text-white block">Job #{job.index}</span>
+                                        <span className="text-xs">
+                                            {job.scenario ? `(Scenario #${job.scenario.index})` : job.id.substring(0, 8)}
+                                        </span>
                                     </td>
                                     <td className="px-6 py-4">{getStatusBadge(job.status)}</td>
                                     <td className="px-6 py-4">{getTierBadge(job.compute_tier)}</td>
@@ -175,7 +178,7 @@ export default function JobDashboard() {
                                 >
                                     {scenarios.map((s) => (
                                         <option key={s.id} value={s.id}>
-                                            {s.weather} - {s.time_of_day} - {s.road_type}
+                                            Scenario #{s.index} | {s.weather === 'sunny' ? 'Clear' : s.weather} - {s.time_of_day} - {s.road_type}
                                         </option>
                                     ))}
                                 </select>

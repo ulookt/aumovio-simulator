@@ -66,7 +66,7 @@ export default function SafetyRisk() {
                     <div className="h-3 bg-gray-700 rounded-full overflow-hidden">
                         <div
                             className={`h-full transition-all duration-500 ${risk.color === 'text-success' ? 'bg-success' :
-                                    risk.color === 'text-warning' ? 'bg-warning' : 'bg-danger'
+                                risk.color === 'text-warning' ? 'bg-warning' : 'bg-danger'
                                 }`}
                             style={{ width: `${percentage}%` }}
                         />
@@ -141,7 +141,7 @@ export default function SafetyRisk() {
                     >
                         {jobs.map((job) => (
                             <option key={job.id} value={job.id}>
-                                Job {job.id.substring(0, 8)} - {job.compute_tier}
+                                Job #{job.index} | {job.scenario ? `${job.scenario.weather === 'sunny' ? 'Clear' : job.scenario.weather} · ${job.scenario.time_of_day} · ${job.compute_tier}` : `Job ${job.id.substring(0, 8)}`} — {new Date(job.created_at).toLocaleDateString()}
                             </option>
                         ))}
                     </select>

@@ -61,7 +61,7 @@ export default function MetricsAnalytics() {
                     >
                         {jobs.map((job) => (
                             <option key={job.id} value={job.id}>
-                                Job {job.id.substring(0, 8)} - {job.compute_tier} - {job.status}
+                                {job.status === 'completed' ? '✅' : '⏳'} Job #{job.index} | {job.scenario ? `${job.scenario.weather === 'sunny' ? 'Clear' : job.scenario.weather} · ${job.scenario.time_of_day} · ${job.compute_tier}` : `Job ${job.id.substring(0, 8)}`} — {new Date(job.created_at).toLocaleDateString()}
                             </option>
                         ))}
                     </select>

@@ -21,6 +21,7 @@ class ScenarioResponse(BaseModel):
     object_count: int
     dataset_size_mb: float
     created_at: datetime
+    index: Optional[int] = None
 
     class Config:
         from_attributes = True
@@ -34,6 +35,7 @@ class JobCreate(BaseModel):
 class JobResponse(BaseModel):
     id: UUID
     scenario_id: UUID
+    scenario: ScenarioResponse
     compute_tier: str
     epochs: int
     status: str
@@ -41,6 +43,7 @@ class JobResponse(BaseModel):
     runtime_sec: float
     cost_estimate: float
     created_at: datetime
+    index: Optional[int] = None
 
     class Config:
         from_attributes = True

@@ -4,7 +4,7 @@ import { Cloudy, Sun, Cloud, Snowflake, Moon, Sunrise, MapPin } from 'lucide-rea
 
 export default function ScenarioBuilder() {
     const [formData, setFormData] = useState({
-        weather: 'sunny',
+        weather: 'clear',
         time_of_day: 'day',
         traffic_density: 0.5,
         road_type: 'city',
@@ -30,7 +30,7 @@ export default function ScenarioBuilder() {
     };
 
     const weatherOptions = [
-        { value: 'sunny', icon: Sun, color: 'text-yellow-400' },
+        { value: 'clear', icon: Sun, color: 'text-yellow-400' },
         { value: 'rain', icon: Cloud, color: 'text-blue-400' },
         { value: 'fog', icon: Cloudy, color: 'text-gray-400' },
         { value: 'snow', icon: Snowflake, color: 'text-cyan-300' }
@@ -67,8 +67,8 @@ export default function ScenarioBuilder() {
                                 type="button"
                                 onClick={() => setFormData({ ...formData, weather: value })}
                                 className={`p-4 rounded-lg border-2 transition-all ${formData.weather === value
-                                        ? 'border-primary bg-primary/10'
-                                        : 'border-border hover:border-gray-500'
+                                    ? 'border-primary bg-primary/10'
+                                    : 'border-border hover:border-gray-500'
                                     }`}
                             >
                                 <Icon className={`w-8 h-8 mx-auto mb-2 ${color}`} />
@@ -88,8 +88,8 @@ export default function ScenarioBuilder() {
                                 type="button"
                                 onClick={() => setFormData({ ...formData, time_of_day: value })}
                                 className={`p-4 rounded-lg border-2 transition-all ${formData.time_of_day === value
-                                        ? 'border-primary bg-primary/10'
-                                        : 'border-border hover:border-gray-500'
+                                    ? 'border-primary bg-primary/10'
+                                    : 'border-border hover:border-gray-500'
                                     }`}
                             >
                                 <Icon className="w-8 h-8 mx-auto mb-2" />
@@ -125,8 +125,8 @@ export default function ScenarioBuilder() {
                                 type="button"
                                 onClick={() => setFormData({ ...formData, road_type: type })}
                                 className={`p-4 rounded-lg border-2 transition-all ${formData.road_type === type
-                                        ? 'border-primary bg-primary/10'
-                                        : 'border-border hover:border-gray-500'
+                                    ? 'border-primary bg-primary/10'
+                                    : 'border-border hover:border-gray-500'
                                     }`}
                             >
                                 <MapPin className="w-8 h-8 mx-auto mb-2" />
