@@ -1,7 +1,83 @@
-import openai
+from openai import OpenAI
 import os
+import json
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+def analyze_driving_session(frames: list[dict]) -> dict:
+    """Analyze telemetry frames and return structured coaching advice"""
+    if not frames:
+        return {
+            "safety_score": 0,
+            "aggression_score": 0,
+            "analysis_text": "No data recorded.",
+            "coach_tip": "Drive some distance to get analysis."
+        }
+
+    # 1. Feature Extraction
+    max_speed = 0.0
+    grass_frames = 0
+    brake_while_turning_frames = 0
+    total_speed = 0.0
+
+    for f in frames:
+        s = abs(f.get('speed', 0))
+        inp = f.get('input', {})
+        
+        max_speed = max(max_speed, s)
+        total_speed += s
+        
+        if 'Grass' in f.get('surface', ''):
+            grass_frames += 1
+            
+        # Brake + Turn (steering angle check, or input left/right)
+        is_turning = inp.get('left') or inp.get('right')
+        is_braking = inp.get('down')
+        if is_turning and is_braking and s > 5.0:
+            brake_while_turning_frames += 1
+    
+    avg_speed = total_speed / len(frames)
+    grass_percent = (grass_frames / len(frames)) * 100
+    
+    # 2. Construct Prompt
+    prompt = f"""Analyze this human driving telemetry data and act as a professional racing coach.
+    
+    Stats:
+    - Duration: {len(frames) / 10:.1f} sec
+    - Max Speed: {max_speed:.1f} (Game Units ~ km/h)
+    - Avg Speed: {avg_speed:.1f}
+    - Time on Grass (Off-track): {grass_percent:.1f}%
+    - Trail Braking events (Brake+Turn): {brake_while_turning_frames} frames
+    
+    Provide a response in JSON format with:
+    - safety_score (0-100)
+    - aggression_score (0-100)
+    - analysis_text (Brief critique)
+    - coach_tip (One specific actionable advice)
+    """
+
+    try:
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a racing instructor. Return JSON only."},
+                {"role": "user", "content": prompt}
+            ],
+            response_format={"type": "json_object"},
+            max_tokens=200,
+            temperature=0.7
+        )
+        content = response.choices[0].message.content
+        return json.loads(content)
+    except Exception as e:
+        print(f"OpenAI Error: {e}")
+        # Fallback
+        return {
+            "safety_score": 50,
+            "aggression_score": 50,
+            "analysis_text": "Could not contact AI Coach.",
+            "coach_tip": "Check API Key configuration."
+        }
 
 def generate_scenario_insight(scenario_data: dict) -> str:
     """Generate AI insights about a scenario's risk factors"""
@@ -19,7 +95,7 @@ Provide a brief technical analysis (2-3 sentences) covering:
 3. Safety considerations"""
 
     try:
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are an AI safety engineer analyzing autonomous driving scenarios."},

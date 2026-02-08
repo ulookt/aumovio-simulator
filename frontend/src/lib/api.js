@@ -42,4 +42,8 @@ export const getRiskAnalysis = (jobId) =>
 export const getInsights = (jobId) =>
     api.get(`/insights/${jobId}`);
 
+// Driving Sim API
+export const analyzeDrivingSession = (telemetryData) =>
+    api.post('/insights/driving-session', { telemetry: telemetryData });
+
 export default api;

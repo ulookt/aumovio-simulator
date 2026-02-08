@@ -7,11 +7,13 @@ import {
   BarChart3,
   Shield,
   Lightbulb,
+  Gamepad2,
   Menu,
   X
 } from 'lucide-react';
 import ScenarioBuilder from './pages/ScenarioBuilder';
 import SceneSimulation from './pages/SceneSimulation';
+import InteractiveDriving from './pages/InteractiveDriving';
 import JobDashboard from './pages/JobDashboard';
 import MetricsAnalytics from './pages/MetricsAnalytics';
 import SafetyRisk from './pages/SafetyRisk';
@@ -27,7 +29,9 @@ function Layout({ children }) {
     { name: 'Jobs Dashboard', path: '/jobs', icon: Cpu },
     { name: 'Metrics & Analytics', path: '/metrics', icon: BarChart3 },
     { name: 'Safety Risk', path: '/risk', icon: Shield },
+
     { name: 'AI Insights', path: '/insights', icon: Lightbulb },
+    { name: 'Driving Sim (Beta)', path: '/drive', icon: Gamepad2 },
   ];
 
   return (
@@ -104,6 +108,7 @@ function App() {
         <Route path="/metrics" element={<MetricsAnalytics key={location.pathname} />} />
         <Route path="/risk" element={<SafetyRisk key={location.pathname} />} />
         <Route path="/insights" element={<InsightPanel key={location.pathname} />} />
+        <Route path="/drive" element={<InteractiveDriving key={location.pathname} />} />
       </Routes>
     </Layout>
   );

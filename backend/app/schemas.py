@@ -93,3 +93,27 @@ class InsightResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+# Driving Session Schemas
+class InputState(BaseModel):
+    up: bool
+    down: bool
+    left: bool
+    right: bool
+    boost: bool
+
+class TelemetryFrame(BaseModel):
+    t: int
+    speed: float
+    angle: float
+    surface: str
+    input: InputState
+
+class DrivingSession(BaseModel):
+    telemetry: list[TelemetryFrame]
+
+class DrivingAdvice(BaseModel):
+    safety_score: int
+    aggression_score: int
+    analysis_text: str
+    coach_tip: str

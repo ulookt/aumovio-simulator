@@ -18,3 +18,19 @@ def get_insights(job_id: UUID, db: Session = Depends(get_db)):
     
     insights = db.query(Insight).filter(Insight.job_id == job_id).order_by(Insight.created_at).all()
     return insights
+
+from ..schemas import DrivingSession, DrivingAdvice
+from ..services.openai_service import analyze_driving_session
+
+@router.post("/driving-session", response_model=DrivingAdvice)
+def analyze_driving(session: DrivingSession):
+    """Analyze a driving session and return AI coaching advice"""
+    # Convert Pydantic list[TelemetryFrame] to list[dict]
+    # Check if pydantic v2
+    if hasattr(session.telemetry[0], 'model_dump'):
+        frames = [f.model_dump() for f in session.telemetry]
+    else:
+        frames = [f.dict() for f in session.telemetry]
+        
+    result = analyze_driving_session(frames)
+    return result

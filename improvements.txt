@@ -1,0 +1,382 @@
+PROJECT PROMPT — INTERACTIVE AI DRIVING SIMULATOR MODE
+
+You are building an advanced interactive module inside a full-stack autonomous driving experimentation platform.
+
+This module introduces a “Driving Simulator Mode” where users can manually drive vehicles, compete with AI cars, and receive AI-generated coaching and safety analysis.
+
+The simulator must remain aligned with autonomous driving and AI experimentation concepts — not just entertainment.
+
+---
+
+1. CORE SIMULATOR OBJECTIVE
+
+---
+
+Create a 2D top-down driving simulation environment where:
+
+* Users control a vehicle using keyboard input.
+* Vehicles obey simplified real-world physics.
+* AI-driven cars race or drive alongside the player.
+* Driving telemetry is recorded.
+* AI analyzes driving behavior and provides improvement recommendations.
+
+The simulator acts as a hybrid between:
+
+* Racing simulator
+* Autonomous driving validation sandbox
+* Human vs AI performance lab
+
+---
+
+2. USER DRIVING CONTROLS
+
+---
+
+Implement keyboard-based driving mechanics:
+
+Movement:
+
+* Arrow Up / W → Accelerate
+* Arrow Down / S → Reverse / decelerate
+* Arrow Left / A → Steer left
+* Arrow Right / D → Steer right
+
+Advanced controls:
+
+* Space → Acceleration boost
+* Shift → Brake
+* Ctrl → Handbrake (optional)
+
+Driving physics must support:
+
+* Velocity
+* Acceleration
+* Friction
+* Turning radius
+* Braking distance
+* Momentum
+
+---
+
+3. VEHICLE PHYSICS MODEL
+
+---
+
+Implement simplified but realistic 2D vehicle dynamics:
+
+Core variables:
+
+* velocity
+* acceleration
+* steering angle
+* friction coefficient
+* mass (optional)
+
+Physics features:
+
+* Gradual acceleration (no instant speed)
+* Realistic braking distance
+* Steering-based turning arcs
+* Drift effect under low friction
+* Collision response on impact
+
+Weather must affect friction:
+
+Sunny → high grip
+Rain → reduced grip
+Fog → moderate grip
+Ice → very low grip
+
+---
+
+4. AI-DRIVEN VEHICLES
+
+---
+
+Implement AI-controlled cars using waypoint path-following.
+
+AI capabilities:
+
+* Lane following
+* Speed adaptation
+* Curve braking
+* Overtaking logic
+* Collision avoidance
+
+Difficulty tiers:
+
+Easy:
+
+* Slow speed
+* Early braking
+* Minimal overtaking
+
+Medium:
+
+* Balanced driving
+* Competitive racing
+
+Hard:
+
+* Aggressive overtakes
+* Late braking
+* High corner speed
+
+---
+
+5. GAME MODES
+
+---
+
+Implement multiple simulation modes:
+
+Time Trial:
+
+* Complete laps in shortest time.
+
+Safety Mode:
+
+* Avoid collisions and near misses.
+
+AI Benchmark:
+
+* Race against AI vehicles.
+
+Endurance Mode:
+
+* Long-distance survival driving.
+
+Training Mode:
+
+* Focus on skill improvement metrics.
+
+---
+
+6. TELEMETRY COLLECTION
+
+---
+
+Capture real-time driving data:
+
+* Average speed
+* Max speed
+* Brake intensity
+* Steering smoothness
+* Reaction time
+* Lane deviation
+* Near misses
+* Collisions
+* Lap time
+
+Store telemetry per session.
+
+---
+
+7. AI DRIVING COACH (OpenAI Integration)
+
+---
+
+After each run, send telemetry data to OpenAI API.
+
+AI must generate:
+
+* Driving improvement feedback
+* Safety analysis
+* Risk observations
+* Performance coaching
+
+Example output:
+
+“You applied excessive braking before medium-speed corners, reducing lap efficiency. Earlier throttle modulation would improve stability.”
+
+AI acts as:
+
+* Driving coach
+* Safety analyst
+* Performance reviewer
+
+---
+
+8. MAP SYSTEM OVERVIEW
+
+---
+
+Implement 10 maps with increasing complexity and difficulty.
+
+Each map must include:
+
+* Unique layout
+* Environmental hazards
+* Traffic patterns
+* Physics modifiers
+* AI difficulty scaling
+
+---
+
+9. MAP LIST (DETAILED)
+
+---
+
+MAP 1 — Beginner Speedway
+
+* Simple oval track
+* No traffic
+* High grip
+* Training map
+
+MAP 2 — Urban Grid
+
+* City blocks
+* Traffic lights
+* Pedestrians
+* Moderate traffic
+
+MAP 3 — Coastal Highway
+
+* Long curves
+* Cliff edges
+* Wind resistance
+
+MAP 4 — Rain Circuit
+
+* Wet roads
+* Reduced friction
+* Longer braking distance
+
+MAP 5 — Night Metro
+
+* Low visibility
+* Pedestrian density
+* Sensor difficulty simulation
+
+MAP 6 — Mountain Pass
+
+* Sharp turns
+* Elevation changes
+* Guardrail hazards
+
+MAP 7 — Industrial Zone
+
+* Obstacles
+* Trucks
+* Narrow lanes
+
+MAP 8 — Fog Valley
+
+* Heavy fog
+* Reduced reaction windows
+* High collision risk
+
+MAP 9 — Autonomous Test Facility
+
+* Complex intersections
+* Multi-lane merges
+* Mixed traffic
+
+MAP 10 — F1 Grand Circuit
+
+* High-speed racing track
+* Chicanes
+* Hairpin turns
+* Elite AI racers
+
+---
+
+10. MAP DIFFICULTY SCALING
+
+---
+
+Difficulty affects:
+
+* AI speed
+* Traffic density
+* Visibility
+* Road friction
+* Obstacle count
+
+---
+
+11. RISK & HEATMAP OVERLAYS
+
+---
+
+Post-run visualization includes:
+
+* Collision heatmap
+* Brake intensity map
+* Speed zones
+* Near-miss clusters
+
+---
+
+12. SCORING SYSTEM
+
+---
+
+Score formula includes:
+
+* Driving safety
+* Lap efficiency
+* Smooth steering
+* AI performance comparison
+
+Penalties:
+
+* Collisions
+* Harsh braking
+* Lane violations
+
+---
+
+13. UI REQUIREMENTS
+
+---
+
+Simulator UI must include:
+
+* Track minimap
+* Speedometer
+* Lap counter
+* Position ranking
+* Telemetry HUD
+* AI coach panel
+
+---
+
+14. ARCHITECTURE
+
+---
+
+Frontend:
+
+* React
+* Canvas rendering
+* Physics loop
+
+Backend:
+
+* FastAPI
+* Telemetry storage
+* AI coaching endpoint
+
+Database:
+
+* PostgreSQL
+* Session records
+* Performance metrics
+
+---
+
+15. FINAL OBJECTIVE
+
+---
+
+Deliver an interactive AI-powered driving simulator that:
+
+* Demonstrates vehicle physics
+* Simulates AI racers
+* Captures telemetry
+* Generates safety insights
+* Provides AI coaching feedback
+
+This module must integrate into the broader autonomous driving experimentation platform.
